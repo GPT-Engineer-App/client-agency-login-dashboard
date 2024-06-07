@@ -88,3 +88,39 @@ export const useDeleteTask = () => {
         },
     });
 };
+
+// Hooks for projects table
+export const useProjects = () => useQuery({
+    queryKey: ['projects'],
+    queryFn: () => fromSupabase(supabase.from('projects').select('*')),
+});
+
+export const useAddProject = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (newProject) => fromSupabase(supabase.from('projects').insert([newProject])),
+        onSuccess: () => {
+            queryClient.invalidateQueries('projects');
+        },
+    });
+};
+
+export const useUpdateProject = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (updatedProject) => fromSupabase(supabase.from('projects').update(updatedProject).eq('id', updatedProject.id)),
+        onSuccess: () => {
+            queryClient.invalidateQueries('projects');
+        },
+    });
+};
+
+export const useDeleteProject = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (id) => fromSupabase(supabase.from('projects').delete().eq('id', id)),
+        onSuccess: () => {
+            queryClient.invalidateQueries('projects');
+        },
+    });
+};
