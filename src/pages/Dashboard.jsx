@@ -3,13 +3,12 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { supabase } from '../integrations/supabase/index.js';
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
-  const navigate = useNavigate();
-  
-  
   const [tasks, setTasks] = useState([]);
   const [task, setTask] = useState('');
+  const navigate = useNavigate();
 
   const addTask = () => {
     if (task.trim()) {
