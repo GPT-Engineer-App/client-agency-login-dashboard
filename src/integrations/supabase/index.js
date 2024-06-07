@@ -1,3 +1,19 @@
+/**
+ * Types for Supabase tables
+ * 
+ * Table: user_data
+ * Columns:
+ * - id: bigint (Primary Key)
+ * - created_at: timestamp with time zone
+ * - user_data: json
+ * 
+ * Table: tasks
+ * Columns:
+ * - id: bigint (Primary Key)
+ * - created_at: timestamp with time zone
+ * - task: text
+ */
+
 import { createClient } from '@supabase/supabase-js';
 import { useQuery, useMutation, useQueryClient, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
