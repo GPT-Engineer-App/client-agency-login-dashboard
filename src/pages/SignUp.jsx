@@ -18,15 +18,17 @@ const SignUp = () => {
     setError('');
 
     try {
-      const { user, error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          data: {
+            name: name,
+          },
+        },
       });
 
       if (error) throw error;
-
-      // Optionally, you can update the user's profile with their name
-      await supabase.from('profiles').insert([{ id: user.id, name }]);
 
       navigate('/dashboard');
     } catch (error) {
@@ -72,13 +74,17 @@ const SignUp = () => {
                 required
               />
             </div>
-            {error && <p className="text-red-500 mb-4">{error}</p>}
+            {error && (
+              <div className="mb-4">
+                <p className="text-red-500">{error}</p>
+              </div>
+            )}
             <Button type="submit" className="w-full">Sign Up</Button>
           </form>
           <div className="mt-4 text-center">
             <p>
               Already have an account?{' '}
-              <a href="/" className="text-blue-500 hover:underline">Login</a>
+              <a href="/login" className="text-blue-500 hover:underline">Login</a>
             </p>
           </div>
         </CardContent>

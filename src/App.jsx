@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
-import { SupabaseAuthUI } from '@/components/SupabaseAuthUI';
+import { SupabaseAuthUI } from './components/SupabaseAuthUI';
 import { Button } from '@/components/ui/button';
 import { useSupabaseAuth } from './hooks/useSupabaseAuth';
 import SignUp from './pages/SignUp';
