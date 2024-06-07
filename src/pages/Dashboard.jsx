@@ -16,7 +16,7 @@ const Dashboard = () => {
 
   const addTask = () => {
     if (task.trim()) {
-      addTaskMutation.mutate({ task });
+      addTaskMutation.mutate({ task: task });
       setTask('');
     }
   };
