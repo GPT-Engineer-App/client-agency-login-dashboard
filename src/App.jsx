@@ -6,17 +6,25 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import SignUp from './pages/SignUp';
 import Dashboard from './pages/Dashboard';
+import { supabase } from './integrations/supabase/index.js';
 import './App.css';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // Handle login logic here
-    navigate('/dashboard');
+    setError('');
+    try {
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+      navigate('/dashboard');
+    } catch (error) {
+      setError(error.message);
+    }
   };
 
   return (
@@ -47,6 +55,7 @@ const Login = () => {
                 required
               />
             </div>
+            {error && <div className="text-red-500 mb-4">{error}</div>}
             <Button type="submit" className="w-full">Login</Button>
           </form>
           <div className="mt-4 text-center">
