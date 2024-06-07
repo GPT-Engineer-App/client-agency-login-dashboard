@@ -2,25 +2,22 @@ import React, { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { supabase } from '../integrations/supabase/index.js';
+import { useAddTask, useTasks } from '../integrations/supabase/index.js';
 import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
-  const [tasks, setTasks] = useState([]);
+  const { data: tasks, isLoading, isError } = useTasks();
   const [task, setTask] = useState('');
   const navigate = useNavigate();
 
   const addTask = () => {
     if (task.trim()) {
-      setTasks([...tasks, task]);
+      addTaskMutation.mutate({ task });
       setTask('');
     }
   };
 
-  const deleteTask = (index) => {
-    const newTasks = tasks.filter((_, i) => i !== index);
-    setTasks(newTasks);
-  };
+  const addTaskMutation = useAddTask();
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -48,14 +45,20 @@ const Dashboard = () => {
               />
               <Button onClick={addTask} className="mt-2">Add Task</Button>
             </div>
-            <ul>
-              {tasks.map((task, index) => (
-                <li key={index} className="flex justify-between items-center mb-2">
-                  <span>{task}</span>
-                  <Button variant="destructive" onClick={() => deleteTask(index)}>Delete</Button>
-                </li>
-              ))}
-            </ul>
+            {isLoading ? (
+              <div>Loading...</div>
+            ) : isError ? (
+              <div>Error loading tasks</div>
+            ) : (
+              <ul>
+                {tasks.map((task, index) => (
+                  <li key={index} className="flex justify-between items-center mb-2">
+                    <span>{task.task}</span>
+                    <Button variant="destructive" onClick={() => deleteTask(index)}>Delete</Button>
+                  </li>
+                ))}
+              </ul>
+            )}
           </CardContent>
         </Card>
       </div>
