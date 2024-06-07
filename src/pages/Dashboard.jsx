@@ -29,7 +29,6 @@ const Dashboard = () => {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    localStorage.removeItem('sessionToken');
     navigate('/');
   };
 

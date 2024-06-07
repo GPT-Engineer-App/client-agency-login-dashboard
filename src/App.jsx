@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -19,9 +19,8 @@ const Login = () => {
     e.preventDefault();
     setError('');
     try {
-      const { data: { session }, error } = await supabase.auth.signInWithPassword({ email, password });
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) throw error;
-      localStorage.setItem('sessionToken', session.access_token);
       navigate('/dashboard');
     } catch (error) {
       setError(error.message);
@@ -72,24 +71,6 @@ const Login = () => {
 };
 
 function App() {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const checkSession = async () => {
-      const sessionToken = localStorage.getItem('sessionToken');
-      if (sessionToken) {
-        const { data: { session }, error } = await supabase.auth.getSession();
-        if (session) {
-          navigate('/dashboard');
-        } else {
-          localStorage.removeItem('sessionToken');
-        }
-      }
-    };
-
-    checkSession();
-  }, [navigate]);
-
   return (
     <Router>
       <Routes>
