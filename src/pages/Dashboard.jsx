@@ -2,17 +2,13 @@ import React, { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { supabase } from '../integrations/supabase/index.js';
 import { useNavigate } from 'react-router-dom';
-import { useSupabaseAuth } from '../integrations/supabase/auth';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
 
 const Dashboard = () => {
-  const navigate = useNavigate();
-  const { logout } = useSupabaseAuth();
-  
   const [tasks, setTasks] = useState([]);
   const [task, setTask] = useState('');
+  const navigate = useNavigate();
 
   const addTask = () => {
     if (task.trim()) {
@@ -27,25 +23,15 @@ const Dashboard = () => {
   };
 
   const handleLogout = async () => {
-    await logout();
+    await supabase.auth.signOut();
     navigate('/');
   };
 
   return (
     <div className="min-h-screen bg-gray-100 p-4">
-      <nav className="bg-white p-4 shadow-md mb-4 flex justify-between items-center">
-        <h1 className="text-xl font-bold">Dashboard</h1>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Avatar>
-              <AvatarImage src="path/to/user/avatar.jpg" alt="User Avatar" />
-              <AvatarFallback>U</AvatarFallback>
-            </Avatar>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem onSelect={handleLogout}>Logout</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+      <nav className="bg-blue-600 p-4 shadow-md mb-4 flex justify-between items-center">
+        <h1 className="text-xl font-bold text-white">Dashboard</h1>
+        <Button variant="ghost" onClick={handleLogout} className="text-white">Logout</Button>
       </nav>
       <div className="max-w-2xl mx-auto">
         <Card>

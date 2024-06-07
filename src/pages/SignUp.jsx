@@ -72,7 +72,7 @@ const SignUp = () => {
               />
             </div>
             {error && <div className="text-red-500 mb-4">{error}</div>}
-            <Button type="submit" className="w-full">Sign Up</Button>
+            <Button type="submit" className="w-full">Register</Button>
           </form>
           <div className="mt-4 text-center">
             <p>
