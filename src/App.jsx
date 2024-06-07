@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import { SupabaseAuthUI } from '@/components/SupabaseAuthUI';
 import { Button } from '@/components/ui/button';
-import { useSupabaseAuth } from '@/hooks/useSupabaseAuth';
+import { useSupabaseAuth } from './hooks/useSupabaseAuth';
 import SignUp from './pages/SignUp';
 import Dashboard from './pages/Dashboard';
 import './App.css';
@@ -26,6 +26,7 @@ const Login = () => {
 
 const Home = () => {
   const { user, signOut } = useSupabaseAuth();
+  const navigate = useNavigate();
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">

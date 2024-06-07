@@ -3,6 +3,8 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
+import ProtectedRoute from '@/components/ProtectedRoute';
+
 const Dashboard = () => {
   const [tasks, setTasks] = useState([]);
   const [task, setTask] = useState('');
@@ -54,4 +56,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default ProtectedRoute(Dashboard);

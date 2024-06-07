@@ -4,17 +4,34 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { supabase } from '@/supabaseClient';
 
 const SignUp = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleSignUp = (e) => {
+  const handleSignUp = async (e) => {
     e.preventDefault();
-    // Handle sign-up logic here
-    navigate('/dashboard');
+    setError('');
+
+    try {
+      const { user, error } = await supabase.auth.signUp({
+        email,
+        password,
+      });
+
+      if (error) throw error;
+
+      // Optionally, you can update the user's profile with their name
+      await supabase.from('profiles').insert([{ id: user.id, name }]);
+
+      navigate('/dashboard');
+    } catch (error) {
+      setError(error.message);
+    }
   };
 
   return (
@@ -55,6 +72,7 @@ const SignUp = () => {
                 required
               />
             </div>
+            {error && <p className="text-red-500 mb-4">{error}</p>}
             <Button type="submit" className="w-full">Sign Up</Button>
           </form>
           <div className="mt-4 text-center">
