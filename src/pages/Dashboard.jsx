@@ -2,13 +2,17 @@ import React, { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useAddTask, useTasks } from '../integrations/supabase/index.js';
+import { useAddTask, useTasks, useDeleteTask } from '../integrations/supabase/index.js';
+import { supabase } from '../integrations/supabase/index.js';
 import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
-  const { data: tasks, isLoading, isError } = useTasks();
   const [task, setTask] = useState('');
   const navigate = useNavigate();
+  const { data: tasks, isLoading, isError } = useTasks();
+  const addTaskMutation = useAddTask();
+  const deleteTaskMutation = useDeleteTask();
+  
 
   const addTask = () => {
     if (task.trim()) {
@@ -17,7 +21,11 @@ const Dashboard = () => {
     }
   };
 
-  const addTaskMutation = useAddTask();
+  
+
+  const deleteTask = (id) => {
+    deleteTaskMutation.mutate(id);
+  };
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -51,10 +59,10 @@ const Dashboard = () => {
               <div>Error loading tasks</div>
             ) : (
               <ul>
-                {tasks.map((task, index) => (
-                  <li key={index} className="flex justify-between items-center mb-2">
+                {tasks.map((task) => (
+                  <li key={task.id} className="flex justify-between items-center mb-2">
                     <span>{task.task}</span>
-                    <Button variant="destructive" onClick={() => deleteTask(index)}>Delete</Button>
+                    <Button variant="destructive" onClick={() => deleteTask(task.id)}>Delete</Button>
                   </li>
                 ))}
               </ul>
